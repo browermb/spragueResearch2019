@@ -12,8 +12,18 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
+    //digitalWrite( steerDir, HIGH );
+    //digitalWrite( steerStp, HIGH );
+    //delayMicroseconds( 100 );
+    //digitalWrite( steerStp, LOW );
+    //delay(1);
     digitalWrite( steerDir, HIGH );
+        delayMicroseconds( 50 );
+
+    for ( int n = 0; n < 175; n++ ) {
     digitalWrite( steerStp, HIGH );
     delayMicroseconds( 100 );
     digitalWrite( steerStp, LOW );
+    delay( 1 );
+  }
 }
