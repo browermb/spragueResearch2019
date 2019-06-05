@@ -53,23 +53,23 @@ difference() {
 
     // holes on the arms
     translate([servo_holder_x, servo_holder_y, min_thick]) {
-        translate([2.5, servo_bottom_height-min_thick-1, servo_elevation+4.25 ]) {
+        translate([2.3, servo_bottom_height-min_thick-1, servo_elevation+4.25 ]) {
             rotate([-90, 0, 0]){
                 cylinder(min_thick +4, 2.07,2.07, $fn=10);
             }
         }
         
-        translate([2.5, servo_bottom_height-min_thick-1, servo_elevation+15.6]) {
+        translate([2.3, servo_bottom_height-min_thick-1, servo_elevation+15.5]) {
             rotate([-90, 0, 0]){
                 cylinder(min_thick +4, 2.07,2.07, $fn=10);
             }
         }
-        translate([2.5 + hole_dist + 5, servo_bottom_height-min_thick-1, servo_elevation+4.25]) {
+        translate([2.4 + hole_dist + 5, servo_bottom_height-min_thick-1, servo_elevation+4.25]) {
             rotate([-90, 0, 0]){
                 cylinder(min_thick + 4, 2.07,2.07, $fn=10);
             }
         }
-        translate([2.5 + hole_dist + 5, servo_bottom_height-min_thick-1, servo_elevation+15.6]) {
+        translate([2.4 + hole_dist + 5, servo_bottom_height-min_thick-1, servo_elevation+15.5]) {
             rotate([-90, 0, 0]) {
                 cylinder(min_thick + 4, 2.07, 2.07, $fn=10);
             }
@@ -108,11 +108,8 @@ difference() {
             cylinder(min_thick + 2, 4.65,4.65, $fn=20);
         
     
-        // tab slots
-         translate([-7.1, 1.15, 0]) {
-            cylinder(min_thick + 2, 1.75,1.75, $fn=20);
-         }
-          translate([7.1, 1.15, 0]) {
+        // tab slot
+          translate([10.6, 1.15, 0]) {
             cylinder(min_thick + 2, 1.75,1.75, $fn=20);
           }
     
