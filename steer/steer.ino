@@ -1,28 +1,52 @@
 
 const int steerPin = A5;
-const int steerStp = A;
+const int steerStp = 6;
 const int steerDir = 7;
+int totalPulses = 0;
+const float stepAngle = .45;
+boolean right = false;
+
 
 void setup() {
-  // put your setup code here, to run once:
-  Serial.begin(9600)
+  Serial.begin(9600);
   pinMode(steerStp, OUTPUT);
   pinMode(steerDir, OUTPUT);
   pinMode(steerPin, INPUT);
 }
 
 void loop() {
-  resistance = analogRead(steerPin);
-  angle = 37.172*resistance - 1.2565;
-  pulse = 615.2*pow(angle, -.849); //this is pulse per revolution
+  int num_pulses;
+  int val = analogRead(steerPin);
+  
+  int angle = map(val, 0, 1023, 0, 270);
 
-  //analogWrite is written in pwm
-  pwm = map(pulse, 0, 300, 0, 255)
-  analogWrite(steerStp, pwm)
+  int currentAngle = totalPulses*stepAngle;
+  
+  if ((angle - currentAngle) > 0) {
+      //Move right
+      right = true;
+      num_pulses = abs(angle - currentAngle)/stepAngle;
+      digitalWrite(steerDir, HIGH);
+  } else {
+      //Move left
+      right = false;
+      num_pulses = abs(angle - currentAngle)/stepAngle;
+      digitalWrite(steerDir, LOW);
+  }
 
-  //TODO: figure out how to do the direction
-  //      need a way to know which way we are turning
+  if (num_pulses > 3) {
+     if (right) {
+       totalPulses = totalPulses + num_pulses;
+     } else {
+       totalPulses = totalPulses - num_pulses;
+     }
+    for (int i = 0; i < num_pulses; i++) {
+      digitalWrite( steerStp, HIGH );
+      delayMicroseconds( 50);
+      digitalWrite( steerStp, LOW );
+      delay( 1 );
+    }
+  }
 
-  //TODO make the stepper motor for that pulse
-  delayMicroseconds(500);
+
 }
