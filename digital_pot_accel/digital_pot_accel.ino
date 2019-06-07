@@ -24,6 +24,9 @@ void loop() {
     } else {
       digitalWrite(8, HIGH); 
     }
-      pot.set(inByte);
+    
+    pot.set(inByte);
   }
+  
+  delay(10);
 }
