@@ -1,0 +1,29 @@
+import serial
+import time
+speed_port = '/dev/ttyACM1' #hardcoded depending on computer
+
+
+def sweepTest():
+
+    try:
+        speed_ser = serial.Serial(speed_port, 9600, write_timeout=0)
+    except Exception as e:
+        print("Motor_endpoint: " + str(e))
+        exit(0)
+
+    angle = 0
+    while True:
+        vals = raw_input()
+        vals = vals.split()
+        values = []
+        for val in vals:
+            values.append(int(val))
+        for val in values:
+            speed_ser.write(chr(val))
+        
+        print(values)
+        time.sleep(.05)
+        
+        
+if __name__ == "__main__": 
+    sweepTest()
