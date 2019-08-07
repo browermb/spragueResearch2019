@@ -4,7 +4,7 @@
 Adafruit_MCP4725 dac1;
 Adafruit_MCP4725 dac2;
 
-int steerRelay = 7;
+int throttleRelay = 9;
 int brakeRelay = 8;
 const int magicStart = 42;
 const int magicEnd = 21;
@@ -13,27 +13,39 @@ const int magicEnd = 21;
 void setup() {
   dac1.begin(0x62);
   dac2.begin(0x63);
-  pinMode(steerRelay, OUTPUT);
+  pinMode(throttleRelay, OUTPUT);
   pinMode(brakeRelay, OUTPUT);
   Serial.begin(9600);
   while (!Serial) {
     delay(15);
   }
+  Serial.println("STARTING");
 }
 
 void loop() {
-  int firstByte = Serial.read();
-  delay(10);
+ 
+  delay(5);
   int throttle = -1;
   int brakeVal = -1;
   int steering = -1;
-  if (firstByte != -1) {
 
+  int firstByte = -1;
+  int secondByte = -1;
+  while (firstByte != magicStart || secondByte != magicEnd) {
+    firstByte = Serial.read();
+    secondByte = Serial.read();
+      Serial.println(firstByte);
+    Serial.println(secondByte);
+  }
+    
+  /**
+  if (firstByte != -1) {
+Serial.println(firstByte);
     while(firstByte != magicStart) {
       firstByte = Serial.read();
     }
 
-    int secondByte = Serial.read();
+    int 
 
     while(secondByte != magicEnd) {
       firstByte = Serial.read();
@@ -42,47 +54,49 @@ void loop() {
       }
       secondByte = Serial.read();
     }
+    **/
+    throttle = Serial.read();
 
-
-    byte throttleByteVal1 = Serial.read();
-    byte throttleByteVal2 = Serial.read();
-    throttle = calculateVal(throttleByteVal1, throttleByteVal2);
-
-    byte brakeByteVal1 = Serial.read();
-    byte brakeByteVal2 = Serial.read();
-    brakeVal = calculateVal(brakeByteVal1, brakeByteVal2);
+    brakeVal = Serial.read();
 
     byte steeringByteVal1 = Serial.read();
     byte steeringByteVal2 = Serial.read();
     steering = calculateVal(steeringByteVal1, steeringByteVal2);
-    
+    Serial.println(firstByte);
+    Serial.println(secondByte);
     Serial.println(throttle);
     Serial.println(brakeVal);
     Serial.println(steering);
-  }
+  
 
-  /**if(throttle != -1 && brakeVal != -1 && steering != -1) {
+  if(throttle != -1 && brakeVal != -1 && steering != -1) {
     
     accel(throttle);
     brake(brakeVal);
-    steer(steering);
-  }**/
+    //steer(steering);
+  }
 }
 
 void accel(int throttleVal) {
-  int val = map(throttleVal, 0, 255, 0, 4095);
+  int val = map(throttleVal, 0, 255, 409, 3645);
+  Serial.println("Setting throttle...");
+  
   dac1.setVoltage(val, false);
+  Serial.print("Throttle set ");
+  Serial.println(throttleVal);
   if (throttleVal == 0) {
-    digitalWrite(steerRelay, LOW);
+    digitalWrite(throttleRelay, LOW);
   } else {
-    digitalWrite(steerRelay, HIGH); 
+    digitalWrite(throttleRelay, HIGH); 
   }
 }
 
 void brake(int brakeVal) {
-  int val = map(brakeVal, 0, 255, 0, 4095); 
+  int val = map(brakeVal, 0, 255, 409, 3767); 
+  Serial.println("Setting brake...");
   dac2.setVoltage(val, false);
-  if (brakeVal == 0) {
+  Serial.println("Brake set.");
+  if (brakeVal == 255) {
     digitalWrite(brakeRelay, LOW);
   } else {
     digitalWrite(brakeRelay, HIGH); 

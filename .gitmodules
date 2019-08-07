@@ -1,0 +1,3 @@
+[submodule "jmuautonoumous"]
+	path = jmuautonoumous
+	url = https://github.com/browermb/jmuautonoumous.git
